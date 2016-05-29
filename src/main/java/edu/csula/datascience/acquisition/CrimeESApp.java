@@ -11,7 +11,7 @@ import com.mongodb.WriteConcern;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import edu.csula.datascience.model.Configuration;
+//import edu.csula.datascience.model.Configuration;
 import edu.csula.datascience.model.Crime;
 
 import com.google.gson.Gson;
@@ -94,8 +94,8 @@ public class CrimeESApp {
 		        
 		        try{
 		    		mongoClient = new MongoClient("localhost", 27017);
-		    		mongoDbName=Configuration.mongodatabase;
-		    		mongoCollection=Configuration.mongocollection;
+		    		mongoDbName="";//Configuration.mongodatabase;
+		    		mongoCollection="";//Configuration.mongocollection;
 		    		dbCollection= mongoClient.getDB(mongoDbName).getCollection(mongoCollection);
 		    		cursor=dbCollection.find();
 		    		  Gson gson = new Gson();
