@@ -47,6 +47,72 @@ public class CrimeESApp {
 		insertDataIntoElasticSearch();
 	}
 
+/*PUT /crime-data/
+{
+    "mappings" : {
+        "crime-details" : {
+            "properties" : {
+                "id" : {
+                    "type" : "long"
+                },
+                "case-number" : {
+                    "type" : "string",
+                    "index" : "not_analyzed"
+                },
+                "date" : {
+                    "type" : "date"
+                },
+				 "block" : {
+                    "type" : "string",
+					 "index" : "not_analyzed"
+                },
+				 "primary-type" : {
+                    "type" : "string",
+					 "index" : "not_analyzed"
+                },
+				 "description" : {
+                    "type" : "string",
+					 "index" : "not_analyzed"
+                },
+				 "location-description" : {
+                    "type" : "string",
+					 "index" : "not_analyzed"
+                },
+				 "arrest" : {
+                    "type" : "integer"
+                },
+				 "domestic" : {
+                    "type" : "integer"
+                },
+				 "district" : {
+                    "type" : "integer"
+				 },
+				 "ward" : {
+                    "type" : "integer"
+                },
+				 "community-area" : {
+                    "type" : "integer"
+                },
+				 "fbi-code" : {
+                    "type" : "integer"
+                },
+                "year": {
+                    "type": "date"
+                },
+				 "updated-on": {
+                    "type": "date"
+                },
+				 "location": {
+                    "type": "geo_point"
+                }
+				 
+            }
+        }
+    }
+}
+
+*/
+	
 	public static void insertDataIntoElasticSearch()
 	{
 		String mongoDbName=null,mongoCollection=null;
@@ -139,70 +205,3 @@ public class CrimeESApp {
 }
 
 
-
-
-/*PUT /crime-data/
-{
-    "mappings" : {
-        "crime-details" : {
-            "properties" : {
-                "id" : {
-                    "type" : "long"
-                },
-                "case-number" : {
-                    "type" : "string",
-                    "index" : "not_analyzed"
-                },
-                "date" : {
-                    "type" : "date"
-                },
-				 "block" : {
-                    "type" : "string",
-					 "index" : "not_analyzed"
-                },
-				 "primary-type" : {
-                    "type" : "string",
-					 "index" : "not_analyzed"
-                },
-				 "description" : {
-                    "type" : "string",
-					 "index" : "not_analyzed"
-                },
-				 "location-description" : {
-                    "type" : "string",
-					 "index" : "not_analyzed"
-                },
-				 "arrest" : {
-                    "type" : "integer"
-                },
-				 "domestic" : {
-                    "type" : "integer"
-                },
-				 "district" : {
-                    "type" : "integer"
-				 },
-				 "ward" : {
-                    "type" : "integer"
-                },
-				 "community-area" : {
-                    "type" : "integer"
-                },
-				 "fbi-code" : {
-                    "type" : "integer"
-                },
-                "year": {
-                    "type": "date"
-                },
-				 "updated-on": {
-                    "type": "date"
-                },
-				 "location": {
-                    "type": "geo_point"
-                }
-				 
-            }
-        }
-    }
-}
-
-*/

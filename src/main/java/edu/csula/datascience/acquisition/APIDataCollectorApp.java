@@ -4,10 +4,17 @@ public class APIDataCollectorApp  {
 
 	public static void main(String[] args) {
 		
-		APIDataSource apiDataSource=new APIDataSource();
-		apiDataSource.getDataFromAPI();
+		try{
+			APIDataSource apiDataSource=new APIDataSource();
+			apiDataSource.getDataFromAPI();
+		} catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		 CrimeESApp.insertDataIntoElasticSearch();
 		 
-		  	System.exit(0);
+		 System.exit(0);
 	}
 
 	
