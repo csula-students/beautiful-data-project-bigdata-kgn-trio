@@ -120,71 +120,43 @@ public class CrimeESApp {
         }
 	}
 
-/*PUT /crime-data/
-{
-    "mappings" : {
-        "crime-details" : {
-            "properties" : {
-                "id" : {
-                    "type" : "long"
-                },
-                "case-number" : {
-                    "type" : "string",
-                    "index" : "not_analyzed"
-                },
-                "date" : {
-                    "type" : "date"
-                },
-				 "block" : {
-                    "type" : "string",
-					 "index" : "not_analyzed"
-                },
-				 "primary-type" : {
-                    "type" : "string",
-					 "index" : "not_analyzed"
-                },
-				 "description" : {
-                    "type" : "string",
-					 "index" : "not_analyzed"
-                },
-				 "location-description" : {
-                    "type" : "string",
-					 "index" : "not_analyzed"
-                },
-				 "arrest" : {
-                    "type" : "integer"
-                },
-				 "domestic" : {
-                    "type" : "integer"
-                },
-				 "district" : {
-                    "type" : "integer"
-				 },
-				 "ward" : {
-                    "type" : "integer"
-                },
-				 "community-area" : {
-                    "type" : "integer"
-                },
-				 "fbi-code" : {
-                    "type" : "integer"
-                },
-                "year": {
-                    "type": "date"
-                },
-				 "updated-on": {
-                    "type": "date"
-                },
-				 "location": {
-                    "type": "geo_point"
-                }
-				 
-            }
-        }
-    }
-}
+	public static void insertInToLocalES()
+	{
+		Node node = nodeBuilder().settings(Settings.builder()
+	            .put("cluster.name", "gurujsprasad")
+	            .put("path.home", "elasticsearch-data")).node();
+	        Client client = node.client();
+	        BulkProcessor bulkProcessor = BulkProcessor.builder(
+	                client,
+	                new BulkProcessor.Listener() {
+	                    @Override
+	                    public void beforeBulk(long executionId,
+	                                           BulkRequest request) {
+	                    }
 
-*/
+	                    @Override
+	                    public void afterBulk(long executionId,
+	                                          BulkRequest request,
+	                                          BulkResponse response) {
+	                    }
+
+	                    @Override
+	                    public void afterBulk(long executionId,
+	                                          BulkRequest request,
+	                                          Throwable failure) {
+	                        System.out.println("Error while importing data to elastic search");
+	                        failure.printStackTrace();
+	                    }
+	                })
+	                .setBulkActions(10000)
+	                .setBulkSize(new ByteSizeValue(1, ByteSizeUnit.GB))
+	                .setFlushInterval(TimeValue.timeValueSeconds(5))
+	                .setConcurrentRequests(1)
+	                .setBackoffPolicy(
+	                    BackoffPolicy.exponentialBackoff(TimeValue.timeValueMillis(100), 3))
+	                .build();
+	}
+
 	
 	public static void insertDataIntoElasticSearch()
 	{
@@ -277,4 +249,69 @@ public class CrimeESApp {
 	
 }
 
+/*PUT /crime-data/
+{
+    "mappings" : {
+        "crime-details" : {
+            "properties" : {
+                "id" : {
+                    "type" : "long"
+                },
+                "case-number" : {
+                    "type" : "string",
+                    "index" : "not_analyzed"
+                },
+                "date" : {
+                    "type" : "date"
+                },
+				 "block" : {
+                    "type" : "string",
+					 "index" : "not_analyzed"
+                },
+				 "primary-type" : {
+                    "type" : "string",
+					 "index" : "not_analyzed"
+                },
+				 "description" : {
+                    "type" : "string",
+					 "index" : "not_analyzed"
+                },
+				 "location-description" : {
+                    "type" : "string",
+					 "index" : "not_analyzed"
+                },
+				 "arrest" : {
+                    "type" : "integer"
+                },
+				 "domestic" : {
+                    "type" : "integer"
+                },
+				 "district" : {
+                    "type" : "integer"
+				 },
+				 "community-area" : {
+                    "type" : "integer"
+                },
+				 "fbi-code" : {
+                    "type" : "integer"
+                },
+                "year": {
+                    "type": "date"
+                },
+				 "updated-on": {
+                    "type": "date"
+                },
+				 "location": {
+                    "type": "geo_point"
+                }
+				 
+            }
+        }
+    }
+}
 
+*/
+
+/* "ward" : {
+"type" : "integer"
+},*/
