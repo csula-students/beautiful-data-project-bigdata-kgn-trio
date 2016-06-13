@@ -2,6 +2,7 @@ package edu.csula.datascience.acquisition;
 
 import org.bson.Document;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -11,9 +12,16 @@ import com.mongodb.WriteConcern;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-//import edu.csula.datascience.model.Configuration;
+import io.searchbox.action.BulkableAction;
+import io.searchbox.client.JestClient;
+import io.searchbox.client.JestClientFactory;
+import io.searchbox.client.config.HttpClientConfig;
+import io.searchbox.core.Bulk;
+import io.searchbox.core.Index;
+import edu.csula.datascience.model.Configuration;
 import edu.csula.datascience.model.Crime;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import org.elasticsearch.action.bulk.*;
 import org.elasticsearch.action.index.IndexRequest;
@@ -31,7 +39,12 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
+
 
 public class CrimeESApp {
 
@@ -45,6 +58,66 @@ public class CrimeESApp {
 	
 	public static void main(String[] args) {
 		insertDataIntoElasticSearch();
+		getDataFromMongoAndInsertIntoAWS();
+	}
+	
+	
+	public static void getDataFromMongoAndInsertIntoAWS()
+	{
+		String mongoDbName=null,mongoCollection=null;
+		DBCollection dbCollection=null;
+		DBObject dbObject=null;
+		DBCursor cursor=null;
+		List <Crime> crimeList=new ArrayList<Crime>();
+		int countOfRecords = 0; //limit 500 records while inserting in to AWS
+		try{
+			mongoClient = new MongoClient("localhost", 27017);
+			mongoDbName=Configuration.mongodatabase;
+			mongoCollection=Configuration.mongocollection;
+			dbCollection= mongoClient.getDB(mongoDbName).getCollection(mongoCollection);
+			cursor=dbCollection.find().sort(new BasicDBObject("date",-1)).limit(5000000);
+			Gson gson = new Gson();
+			
+			JestClientFactory factory = new JestClientFactory();
+	        factory.setHttpClientConfig(new HttpClientConfig
+	            .Builder(awsAddress)
+	            .multiThreaded(true)
+	            .build());
+	        JestClient client = factory.getObject();
+	        
+			for (DBObject record : cursor) {
+				Crime c=new Crime();
+    			c.setArrest(Integer.parseInt(record.get("arrest").toString()));
+    			c.setCaseNumber(record.get("caseNumber").toString());
+    			c.setDate(record.get("date").toString());
+    			c.setDescription(record.get("description").toString());
+    			c.setDistrict(record.get("district").toString());
+    			c.setDomestic(Integer.parseInt(record.get("domestic").toString()));
+    			c.setFbiCode(record.get("fbiCode").toString());
+    			c.setId(Integer.parseInt(record.get("id").toString()));
+    			c.setLocationDescription(record.get("locationDescription").toString());
+    			c.setPrimaryType(record.get("primaryType").toString());
+    			c.setUpdatedOn(record.get("updatedOn").toString());
+    			c.setYear(Integer.parseInt(record.get("year").toString()));
+    			c.setBlock(record.get("block").toString());
+    			c.setLocation(record.get("location").toString());
+    			if (crimeList.size() < 500)
+				{
+    				crimeList.add(c);
+				}
+    			else
+    			{
+    				insertInToAWSES(crimeList); //insert in to AWS ES
+    				crimeList=new ArrayList<Crime>();
+    			}
+    	
+			}
+				
+		}
+		catch(Exception e)
+        {
+    		System.out.println(e.getMessage());
+        }
 	}
 
 /*PUT /crime-data/
