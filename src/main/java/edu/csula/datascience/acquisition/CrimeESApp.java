@@ -119,7 +119,31 @@ public class CrimeESApp {
     		System.out.println(e.getMessage());
         }
 	}
-
+	public static void insertInToAWSES(List<Crime> list)
+	{
+	        JestClientFactory factory = new JestClientFactory();
+	        factory.setHttpClientConfig(new HttpClientConfig
+	            .Builder(awsAddress)
+	            .multiThreaded(true)
+	            .build());
+	        JestClient client = factory.getObject();
+	        try {
+	            Collection<BulkableAction> actions = Lists.newArrayList();
+	            list.stream()
+	                .forEach(tmp -> {
+	                    actions.add(new Index.Builder(tmp).build());
+	                });
+	            Bulk.Builder bulk = new Bulk.Builder()
+	                .defaultIndex(indexName)
+	                .defaultType(typeName)
+	                .addAction(actions);
+	            client.execute(bulk.build());
+	            System.out.println("Inserted 500 documents to cloud");
+	        } catch (IOException e) {
+	        	insertInToAWSES(list);
+	            //e.printStackTrace();
+	        }
+	}
 	public static void insertInToLocalES()
 	{
 		Node node = nodeBuilder().settings(Settings.builder()
