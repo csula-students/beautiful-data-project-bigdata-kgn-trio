@@ -18,7 +18,7 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
-import edu.csula.datascience.model.Configuration;
+//import edu.csula.datascience.model.Configuration;
 import edu.csula.datascience.model.Crime;
 
 import com.google.common.collect.Lists;
@@ -55,7 +55,7 @@ public class CrimeESApp {
 	
     private final static String indexName = "crime-data";
     private final static String typeName = "crime-details";
-	
+    private final static String awsAddress = "";//"http://search-bg-data-crime-wfb4wjjihogxhq447stgvxmv6a.us-west-2.es.amazonaws.com/";		
 	public static void main(String[] args) {
 		insertDataIntoElasticSearch();
 		getDataFromMongoAndInsertIntoAWS();
@@ -72,8 +72,8 @@ public class CrimeESApp {
 		int countOfRecords = 0; //limit 500 records while inserting in to AWS
 		try{
 			mongoClient = new MongoClient("localhost", 27017);
-			mongoDbName=Configuration.mongodatabase;
-			mongoCollection=Configuration.mongocollection;
+			mongoDbName="";//Configuration.mongodatabase;
+			mongoCollection="";//Configuration.mongocollection;
 			dbCollection= mongoClient.getDB(mongoDbName).getCollection(mongoCollection);
 			cursor=dbCollection.find().sort(new BasicDBObject("date",-1)).limit(5000000);
 			Gson gson = new Gson();
