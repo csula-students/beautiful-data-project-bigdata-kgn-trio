@@ -1,28 +1,44 @@
 package edu.csula.datascience.model;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-public class Crime   {
+public class Crime    {
 	
-	public Boolean arrest;
+	public int arrest=0;
 	public String caseNumber;
 	public String date;
 	public String description;
 	public String district;
-	public String domestic;
+	public int domestic=0;
 	public String fbiCode;
 	public int id;
 	public String locationDescription;
 	public String primaryType;
 	public String updatedOn;
-	public int year;
+	public int year=0;
 	
 	public Crime(){}
 	
-	public Crime(Boolean arrest, String caseNumber, String date, String description, String district, String domestic,
-			String fbi_code, int id, String location_description, String primary_type, String updated_on, int year) {
+	/* public static Crime build(Crime c)
+	{
+		Crime crime=new Crime();
+		crime.arrest = c.arrest;
+		crime.caseNumber = c.caseNumber;
+		crime.date = c.date;
+		crime.description = c.description;
+		crime.district = c.district;
+		crime.domestic = c.domestic;
+		crime.fbiCode = c.fbiCode;
+		crime.id = c.id;
+		crime.locationDescription = c.locationDescription;
+		crime.primaryType = c.primaryType;
+		crime.updatedOn = c.updatedOn;
+		crime.year = c.year;
+		return crime;
+	}*/
+	
+	
+	
+	public Crime(int arrest, String caseNumber, String date, String description, String district, int domestic,
+			String fbiCode, int id, String locationDescription, String primaryType, String updatedOn, int year) {
 		super();
 		this.arrest = arrest;
 		this.caseNumber = caseNumber;
@@ -30,19 +46,21 @@ public class Crime   {
 		this.description = description;
 		this.district = district;
 		this.domestic = domestic;
-		this.fbiCode = fbi_code;
+		this.fbiCode = fbiCode;
 		this.id = id;
-		this.locationDescription = location_description;
-		this.primaryType = primary_type;
-		this.updatedOn = updated_on;
+		this.locationDescription = locationDescription;
+		this.primaryType = primaryType;
+		this.updatedOn = updatedOn;
 		this.year = year;
 	}
-	
-	public Boolean getArrest() {
+
+
+
+	public int getArrest() {
 		return arrest;
 	}
 	
-	public void setArrest(Boolean arrest) {
+	public void setArrest(int arrest) {
 		this.arrest = arrest;
 	}
 	public String getCaseNumber() {
@@ -69,10 +87,10 @@ public class Crime   {
 	public void setDistrict(String district) {
 		this.district = district;
 	}
-	public String getDomestic() {
+	public int getDomestic() {
 		return domestic;
 	}
-	public void setDomestic(String domestic) {
+	public void setDomestic(int domestic) {
 		this.domestic = domestic;
 	}
 	public String getFbiCode() {
@@ -113,7 +131,7 @@ public class Crime   {
 	}
 	
 	
-	public static int nullValueCt=1;
+	/*public static int nullValueCt=0;
 	
 	public static int getNullValueCt() {
 		return nullValueCt;
@@ -121,8 +139,48 @@ public class Crime   {
 
 	public static void setNullValueCt(int nullValueCt) {
 		Crime.nullValueCt = nullValueCt;
-	}
+	}*/
+	
+	/* public static Crime build(MockCrime data) {
+		
+		 Crime crime=new Crime();
+			
+			crime.setArrest(data.getArrest());
+			crime.setCaseNumber(data.getCaseNumber());
+			crime.setDate(data.getDate());
+			crime.setDistrict(data.getDistrict());
+			crime.setDescription(data.getLocationDescription());
+			crime.setDomestic(data.getDomestic().equals("true")?1:0);
+			crime.setFbiCode(data.getFbiCode());
+			crime.setId(data.getId());
+			crime.setLocationDescription(data.getLocationDescription());
+			crime.setPrimaryType(data.getPrimaryType());
+			crime.setUpdatedOn(data.getUpdatedOn());
+			crime.setYear(data.getYear());
+			return crime;
+		 
+	    }*/
 
+	 public static Crime buildCrimeEntity(CrimeJSON json)
+		{
+			Crime crime=new Crime();
+			
+			crime.setArrest(json.getArrest().equals("true")?1:0);
+			crime.setCaseNumber(json.getCase_number());
+			crime.setDate(json.getDate().substring(0, 10));
+			crime.setDistrict(json.getDistrict());
+			crime.setDescription(json.getDescription());
+			crime.setDomestic(json.getDomestic().equals("true")?1:0);
+			crime.setFbiCode(json.getFbi_code());
+			crime.setId(Integer.parseInt(json.getId()));
+			crime.setLocationDescription(json.getLocation_description());
+			crime.setPrimaryType(json.getPrimary_type());
+			crime.setUpdatedOn(json.getUpdated_on().substring(0, 10));
+			crime.setYear(Integer.parseInt(json.getYear()));
+			return crime;
+		}
+
+	 
 	public Crime convertToCrimeEntity(CrimeJSON json)
 	{
 		if(json.getArrest()==null || json.getCase_number()==null||
@@ -132,18 +190,19 @@ public class Crime   {
 			json.getLocation_description()==null|| json.getPrimary_type()==null ||
 			json.getUpdated_on()==null|| json.getYear()==null )
 		{
-			System.out.println("Null Value -->"+nullValueCt);
-			nullValueCt++;
+			/*System.out.println("Null Value -->"+nullValueCt);
+			nullValueCt++;*/
 			return null;
 		}
 		
 		Crime crime=new Crime();
-		crime.setArrest(json.getArrest().equals("true")?Boolean.TRUE:Boolean.FALSE);
+		
+		crime.setArrest(json.getArrest().equals("true")?1:0);
 		crime.setCaseNumber(json.getCase_number());
 		crime.setDate(json.getDate().substring(0, 10));
 		crime.setDistrict(json.getDistrict());
 		crime.setDescription(json.getDescription());
-		crime.setDomestic(json.getDomestic());
+		crime.setDomestic(json.getDomestic().equals("true")?1:0);
 		crime.setFbiCode(json.getFbi_code());
 		crime.setId(Integer.parseInt(json.getId()));
 		crime.setLocationDescription(json.getLocation_description());
@@ -153,43 +212,7 @@ public class Crime   {
 		return crime;
 	}
 	
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((caseNumber == null) ? 0 : caseNumber.hashCode());
-		result = prime * result + id;
-		result = prime * result + year;
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Crime other = (Crime) obj;
-		if (caseNumber == null) {
-			if (other.caseNumber != null)
-				return false;
-		} else if (!caseNumber.equals(other.caseNumber))
-			return false;
-		if (id != other.id)
-			return false;
-		if (year != other.year)
-			return false;
-		return true;
-	}
-
-	@Override
-	   public String toString() {
- 	   return this.getCaseNumber()+"~"+this.getId()+"~"+this.getYear()+"~"+this.getArrest()+"~"+this.getDate()+"~"+this.getDescription()+"~"+this.getDistrict()+"~"+this.getDomestic()+"~"+this.getFbiCode()+"~"+this.getLocationDescription()+"~"+this.getPrimaryType()+"~"+this.getUpdatedOn();
-	   }
-
+	
 	
 	
 

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class CrimeJSON {
 	
 	public String arrest;
-	public String beat;
-	public String block;
+//	public String beat;
+//	public String block;
 	public String case_number;
 	public String community_area;
 	public String date;
@@ -15,16 +15,16 @@ public class CrimeJSON {
 	public String domestic;
 	public String fbi_code;
 	public String id;
-	public String iucr;
-	public String latitude;
+//	public String iucr;
+//	public String latitude;
 	//public String location;
 	public String location_description;
-	public String longitude;
+//	public String longitude;
 	public String primary_type;
 	public String updated_on;
 	public String ward;
-	public String x_coordinate;
-	public String y_coordinate;
+//	public String x_coordinate;
+//	public String y_coordinate;
 	public String year;
 	
 	public CrimeJSON(){}
@@ -35,8 +35,8 @@ public class CrimeJSON {
 			String updated_on, String ward, String x_coordinate, String y_coordinate, String year) {
 		super();
 		this.arrest = arrest;
-		this.beat = beat;
-		this.block = block;
+//		this.beat = beat;
+//		this.block = block;
 		this.case_number = case_number;
 		this.community_area = community_area;
 		this.date = date;
@@ -45,16 +45,16 @@ public class CrimeJSON {
 		this.domestic = domestic;
 		this.fbi_code = fbi_code;
 		this.id = id;
-		this.iucr = iucr;
-		this.latitude = latitude;
+//		this.iucr = iucr;
+//		this.latitude = latitude;
 		//this.location = location;
 		this.location_description = location_description;
-		this.longitude = longitude;
+//		this.longitude = longitude;
 		this.primary_type = primary_type;
 		this.updated_on = updated_on;
 		this.ward = ward;
-		this.x_coordinate = x_coordinate;
-		this.y_coordinate = y_coordinate;
+//		this.x_coordinate = x_coordinate;
+//		this.y_coordinate = y_coordinate;
 		this.year = year;
 	}
 	public String getArrest() {
@@ -63,7 +63,7 @@ public class CrimeJSON {
 	public void setArrest(String arrest) {
 		this.arrest = arrest;
 	}
-	public String getBeat() {
+	/*public String getBeat() {
 		return beat;
 	}
 	public void setBeat(String beat) {
@@ -74,7 +74,7 @@ public class CrimeJSON {
 	}
 	public void setBlock(String block) {
 		this.block = block;
-	}
+	}*/
 	public String getCase_number() {
 		return case_number;
 	}
@@ -123,7 +123,7 @@ public class CrimeJSON {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getIucr() {
+	/*public String getIucr() {
 		return iucr;
 	}
 	public void setIucr(String iucr) {
@@ -134,7 +134,7 @@ public class CrimeJSON {
 	}
 	public void setLatitude(String latitude) {
 		this.latitude = latitude;
-	}
+	}*/
 /*	public String getLocation() {
 		return location;
 	}
@@ -147,12 +147,12 @@ public class CrimeJSON {
 	public void setLocation_description(String location_description) {
 		this.location_description = location_description;
 	}
-	public String getLongitude() {
+	/*public String getLongitude() {
 		return longitude;
 	}
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
-	}
+	}*/
 	public String getPrimary_type() {
 		return primary_type;
 	}
@@ -171,7 +171,7 @@ public class CrimeJSON {
 	public void setWard(String ward) {
 		this.ward = ward;
 	}
-	public String getX_coordinate() {
+	/*public String getX_coordinate() {
 		return x_coordinate;
 	}
 	public void setX_coordinate(String x_coordinate) {
@@ -182,18 +182,11 @@ public class CrimeJSON {
 	}
 	public void setY_coordinate(String y_coordinate) {
 		this.y_coordinate = y_coordinate;
-	}
+	}*/
 	public String getYear() {
 		return year;
 	}
 	public void setYear(String year) {
 		this.year = year;
 	}
-	
-	
-	
-	
-	
-	
-
 }
